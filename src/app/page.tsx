@@ -10,43 +10,36 @@ type LinkIcon =
 
 const links: Array<{
   href: string;
-  label: string;
   ariaLabel: string;
   icon: LinkIcon;
 }> = [
   {
     href: "https://x.com/StealthDobie",
-    label: "X",
     ariaLabel: "Open StealthDobie on X in a new tab",
     icon: "x",
   },
   {
     href: "https://anoncoin.it/dobermann",
-    label: "Anoncoin",
     ariaLabel: "Open Dobermann on Anoncoin in a new tab",
     icon: "anoncoin",
   },
   {
     href: "https://t.me/DobermannOnAnon",
-    label: "Telegram",
     ariaLabel: "Open the Dobermann Telegram community in a new tab",
     icon: "telegram",
   },
   {
     href: "https://github.com/StealthDobie",
-    label: "GitHub",
     ariaLabel: "Open the StealthDobie GitHub organization in a new tab",
     icon: "github",
   },
   {
     href: "https://dexscreener.com/solana/j3mfhoqb27xhl1xuysopfu1vzhbzcek7fzyvsweydoge",
-    label: "Dex Screener",
     ariaLabel: "Open the Dobermann market on Dex Screener in a new tab",
     icon: "dexscreener",
   },
   {
     href: "https://www.coingecko.com/en/coins/dobermann-2",
-    label: "CoinGecko",
     ariaLabel: "Open Dobermann on CoinGecko in a new tab",
     icon: "coingecko",
   },
@@ -126,7 +119,6 @@ export default function Home() {
               aria-label={link.ariaLabel}
             >
               <PixelIcon name={link.icon} />
-              <span>{link.label}</span>
             </a>
           ))}
         </nav>
