@@ -1,27 +1,32 @@
 import type { Metadata, Viewport } from "next";
+import { siteDescription, siteName, siteUrl, tokenTicker } from "@/lib/site";
 import "./globals.css";
-
-const deploymentUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL;
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  (deploymentUrl ? `https://${deploymentUrl}` : "http://localhost:3000");
-
-const description = "The official home of $DOBERMANN on Solana.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "$DOBERMANN | StealthDobie",
-  description,
-  applicationName: "StealthDobie",
-  icons: {
-    icon: "/stealthdobie-emblem.png",
-    apple: "/stealthdobie-emblem.png",
+  title: `${siteName} (${tokenTicker}) | Official Solana Token`,
+  description: siteDescription,
+  applicationName: siteName,
+  alternates: {
+    canonical: siteUrl,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
   openGraph: {
-    title: "$DOBERMANN",
-    description,
-    siteName: "StealthDobie",
+    title: `${siteName} (${tokenTicker})`,
+    description: siteDescription,
+    siteName,
     type: "website",
+    url: siteUrl,
     images: [
       {
         url: "/og.png",
@@ -33,8 +38,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "$DOBERMANN",
-    description,
+    title: `${siteName} (${tokenTicker})`,
+    description: siteDescription,
+    site: "@StealthDobie",
+    creator: "@StealthDobie",
     images: ["/og.png"],
   },
 };

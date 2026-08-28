@@ -1,4 +1,16 @@
 import Image from "next/image";
+import {
+  officialLinks,
+  projectSummary,
+  siteDescription,
+  siteName,
+  siteUrl,
+  tokenMint,
+  tokenName,
+  tokenNetwork,
+  tokenProgram,
+  tokenTicker,
+} from "@/lib/site";
 
 type LinkIcon =
   | "x"
@@ -10,40 +22,119 @@ type LinkIcon =
 
 const links: Array<{
   href: string;
+  label: string;
   ariaLabel: string;
   icon: LinkIcon;
 }> = [
   {
-    href: "https://x.com/StealthDobie",
+    href: officialLinks.x,
+    label: "X",
     ariaLabel: "Open StealthDobie on X in a new tab",
     icon: "x",
   },
   {
-    href: "https://anoncoin.it/dobermann",
+    href: officialLinks.anoncoin,
+    label: "Anoncoin",
     ariaLabel: "Open Dobermann on Anoncoin in a new tab",
     icon: "anoncoin",
   },
   {
-    href: "https://t.me/DobermannOnAnon",
+    href: officialLinks.telegram,
+    label: "Telegram",
     ariaLabel: "Open the Dobermann Telegram community in a new tab",
     icon: "telegram",
   },
   {
-    href: "https://github.com/StealthDobie",
+    href: officialLinks.github,
+    label: "GitHub",
     ariaLabel: "Open the StealthDobie GitHub organization in a new tab",
     icon: "github",
   },
   {
-    href: "https://dexscreener.com/solana/j3mfhoqb27xhl1xuysopfu1vzhbzcek7fzyvsweydoge",
+    href: officialLinks.dexscreener,
+    label: "Dex Screener",
     ariaLabel: "Open the Dobermann market on Dex Screener in a new tab",
     icon: "dexscreener",
   },
   {
-    href: "https://www.coingecko.com/en/coins/dobermann-2",
+    href: officialLinks.coingecko,
+    label: "CoinGecko",
     ariaLabel: "Open Dobermann on CoinGecko in a new tab",
     icon: "coingecko",
   },
 ];
+
+const facts = [
+  ["Ticker", tokenTicker],
+  ["Network", `${tokenNetwork} mainnet-beta`],
+  ["Token program", tokenProgram],
+] as const;
+
+const faqs = [
+  {
+    question: "Which network is it on?",
+    answer: `${tokenName} is issued on ${tokenNetwork} mainnet-beta using the ${tokenProgram} program.`,
+  },
+  {
+    question: "What is the official mint?",
+    answer: `The official ${tokenTicker} mint is ${tokenMint}.`,
+  },
+  {
+    question: "Which links are official?",
+    answer:
+      "The icon links above connect to the official X, Anoncoin, Telegram, GitHub, Dex Screener, and CoinGecko pages.",
+  },
+  {
+    question: "How can I verify the token?",
+    answer: `Match the token's mint to ${tokenMint} before interacting with a market.`,
+  },
+] as const;
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      url: siteUrl,
+      name: siteName,
+      alternateName: tokenTicker,
+      description: siteDescription,
+      publisher: { "@id": `${siteUrl}/#project` },
+      about: { "@id": `${siteUrl}/#token` },
+    },
+    {
+      "@type": "Organization",
+      "@id": `${siteUrl}/#project`,
+      name: siteName,
+      url: siteUrl,
+      description: projectSummary,
+      logo: `${siteUrl}/stealthdobie-emblem.png`,
+      sameAs: [
+        officialLinks.x,
+        officialLinks.telegram,
+        officialLinks.github,
+      ],
+    },
+    {
+      "@type": "Thing",
+      "@id": `${siteUrl}/#token`,
+      name: tokenName,
+      alternateName: tokenTicker,
+      description: projectSummary,
+      identifier: {
+        "@type": "PropertyValue",
+        propertyID: "Solana mint",
+        value: tokenMint,
+      },
+      sameAs: [
+        officialLinks.anoncoin,
+        officialLinks.dexscreener,
+        officialLinks.coingecko,
+      ],
+    },
+  ],
+};
 
 const iconPaths: Record<LinkIcon, string> = {
   x: "M2 1h3v2h2v2h2V3h2V1h3v3h-2v2h-2v4h2v2h2v3h-3v-2H9v-2H7v2H5v2H2v-3h2v-2h2V8H4V6H2V1Z",
@@ -109,7 +200,11 @@ export default function Home() {
           </h1>
         </div>
 
-        <nav className="social-links" aria-label="Dobermann links">
+        <nav
+          className="social-links"
+          id="official-links"
+          aria-label="Official Dobermann links"
+        >
           {links.map((link) => (
             <a
               key={link.href}
@@ -119,10 +214,52 @@ export default function Home() {
               aria-label={link.ariaLabel}
             >
               <PixelIcon name={link.icon} />
+              <span className="visually-hidden">{link.label}</span>
             </a>
           ))}
         </nav>
       </section>
+
+      <section className="intel" aria-labelledby="intel-title">
+        <p className="intel-kicker">PROJECT INTEL // VERIFIED</p>
+        <h2 id="intel-title">DOBERMANN ON ANONCOIN</h2>
+        <p className="intel-summary">{projectSummary}</p>
+
+        <dl className="intel-facts">
+          {facts.map(([label, value]) => (
+            <div key={label}>
+              <dt>{label}</dt>
+              <dd>{value}</dd>
+            </div>
+          ))}
+          <div className="mint-fact">
+            <dt>Official mint</dt>
+            <dd>
+              <code>{tokenMint}</code>
+            </dd>
+          </div>
+        </dl>
+
+        <div className="intel-faq" aria-labelledby="faq-title">
+          <h3 id="faq-title">FIELD NOTES</h3>
+          <div className="faq-grid">
+            {faqs.map((faq) => (
+              <article key={faq.question}>
+                <h4>{faq.question}</h4>
+                <p>{faq.answer}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+
+      </section>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
+        }}
+      />
     </main>
   );
 }
